@@ -17,5 +17,9 @@ func routers(app *config.AppConfig) http.Handler {
 
 	r.Get("/", handlers.Repo.Home)
 	r.Get("/about", handlers.Repo.About)
+
+	fileServer := http.FileServer(http.Dir("./static/"))
+	r.Handle("/static/*", http.StripPrefix("/static", fileServer))
+
 	return r
 }
