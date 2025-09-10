@@ -17,16 +17,18 @@
       crossorigin="anonymous"
     />
 
-    <style>
-      .my-footer {
-        height: 5em;
-        background-color: #163b65;
-        margin-top: 1.5em;
-        padding: 1em;
-        color: white;
-        font-size: 80%;
-      }
-    </style>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/vanillajs-datepicker@1.3.4/dist/css/datepicker-bs5.min.css"
+    />
+
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css"
+    />
+
+    <link rel="stylesheet" href="static/css/style.css" />
   </head>
 
   <body>
@@ -99,37 +101,33 @@
 
       <form action="reservation.html" method="get" class="row">
         <div class="row">
-          <div class="mb-3 col">
-            <label for="start_date" class="form-label">Starting Date</label>
-            <input
-              type="date"
-              class="form-control"
-              id="start_date"
-              name="start_date"
-              aria-describedby="startDateHelp"
-              required
-            />
-            <div id="startDateHelp" class="form-text">
-              Enter your starting date in the form of DD-MM-YYYY.
+          <div class="col">
+            <!-- Date picker -->
+            <div class="row" id="reservation-dates">
+              <div class="col">
+                <input
+                  class="form-control"
+                  type="text"
+                  name="start"
+                  placeholder="Arrival date"
+                  required
+                />
+              </div>
+              <div class="col-auto">to</div>
+              <div class="col">
+                <input
+                  class="form-control"
+                  type="text"
+                  name="end"
+                  placeholder="Departure date"
+                  required
+                />
+              </div>
             </div>
-          </div>
-
-          <div class="mb-3 col">
-            <label for="end_date" class="form-label">Ending Date</label>
-            <input
-              type="date"
-              class="form-control"
-              id="end_date"
-              name="end_date"
-              aria-describedby="endDateHelp"
-              required
-            />
-            <div id="endDateHelp" class="form-text">
-              Enter your ending date in the form of DD-MM-YYYY.
-            </div>
+            <!-- Date picker -->
           </div>
         </div>
-
+        <br /><br /><br />
         <div class="col-auto">
           <button type="submit" class="btn btn-primary">
             Search Availability
@@ -138,6 +136,16 @@
       </form>
     </div>
     <!-- container -->
+
+    <br /><br /><br />
+
+    <!-- button -->
+    <div class="container">
+      <div class="col-auto">
+        <button class="btn btn-primary" id="toast-btn">Show toast</button>
+      </div>
+    </div>
+    <!-- button -->
 
     <!-- Footer -->
     <footer class="my-footer">
@@ -151,10 +159,193 @@
     </footer>
     <!-- Footer -->
 
+    <!-- scripts -->
+    <!-- bootstrap -->
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
       integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
       crossorigin="anonymous"
     ></script>
+    <!-- bootstrap -->
+
+    <!-- date picker -->
+    <script src="https://cdn.jsdelivr.net/npm/vanillajs-datepicker@1.3.4/dist/js/datepicker-full.min.js"></script>
+
+    <script>
+      const elem = document.getElementById("reservation-dates");
+      const rangepicker = new DateRangePicker(elem, {
+        format: "yyyy-mm-dd",
+      });
+    </script>
+    <!-- date picker -->
+
+    <!-- toastify -->
+    <script
+      type="text/javascript"
+      src="https://cdn.jsdelivr.net/npm/toastify-js"
+    ></script>
+    <!-- toastify -->
+
+    <!-- custom javascript code -->
+    <script>
+      // ------------------sweetAlert2--------------
+      // document
+      //   .getElementById("toast-btn")
+      //   .addEventListener("click", function () {
+      //     notifyModal(
+      //       "title",
+      //       "<em>hello-world</em>",
+      //       "success",
+      //       "My text for the button"
+      //     );
+      //   });
+
+      // ------------------tostify--------------
+      // document.getElementById("toast-btn").addEventListener("click", showToast);
+
+      let attention = Prompt();
+
+      document
+        .getElementById("toast-btn")
+        .addEventListener("click", function () {
+          let html = `
+        <form id="check-availability-form" action="" method="post" novalidate class="needs-validation">
+            <div class="row">
+                <div class="col">
+                    <div class="row" id="reservation-dates-modal">
+                        <div class="col">
+                            <input disabled required class="form-control" type="text" name="start" id="start" placeholder="Arrival">
+                        </div>
+                        <div class="col">
+                            <input disabled required class="form-control" type="text" name="end" id="end" placeholder="Departure">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+        `;
+          attention.custom({ msg: html, title: "Choose your dates" });
+        });
+
+      function showToast() {
+        Toastify({
+          text: "This is a toast",
+          duration: 3000,
+          destination: "https://github.com/apvarun/toastify-js",
+          newWindow: true,
+          close: true,
+          gravity: "top", // `top` or `bottom`
+          position: "right", // `left`, `center` or `right`
+          stopOnFocus: true, // Prevents dismissing of toast on hover
+          style: {
+            background: "linear-gradient(to right, #00b09b, #96c93d)",
+          },
+          onClick: function () {}, // Callback after click
+        }).showToast();
+      }
+
+      function notifyModal(title, text, icon, confirmationButton) {
+        Swal.fire({
+          title: title,
+          html: text,
+          icon: icon,
+          confirmButtonText: confirmationButton,
+        });
+      }
+
+      function Prompt() {
+        let toast = function (c) {
+          const { msg = "", icon = "success", position = "top-end" } = c;
+
+          const Toast = Swal.mixin({
+            toast: true,
+            title: msg,
+            icon: icon,
+            position: position,
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+              toast.onmouseenter = Swal.stopTimer;
+              toast.onmouseleave = Swal.resumeTimer;
+            },
+          });
+          Toast.fire({
+            // icon: icon,
+            // title: msg,
+            // title: "Signed in successfully",
+          });
+        };
+
+        let success = function (c) {
+          const { msg = "", title = "", icon = "success", footer = "" } = c;
+
+          Swal.fire({
+            icon: icon,
+            title: title,
+            text: msg,
+            footer: footer,
+          });
+        };
+
+        let error = function (c) {
+          const { msg = "", title = "", icon = "error", footer = "" } = c;
+
+          Swal.fire({
+            icon: icon,
+            title: title,
+            text: msg,
+            footer: footer,
+          });
+        };
+
+        async function custom(c) {
+          const { msg = "", title = "", icon = "" } = c;
+
+          const { value: formValues } = await Swal.fire({
+            title: title,
+            html: msg,
+            backdrop: false,
+            focusConfirm: false,
+            showCancelButton: true,
+            willOpen: () => {
+              const elem = document.getElementById("reservation-dates-modal");
+              const rp = new DateRangePicker(elem, {
+                format: "yyyy-mm-dd",
+                showOnFocus: true,
+                orientation: "top auto",
+              });
+            },
+            preConfirm: () => {
+              return [
+                document.getElementById("start").value,
+                document.getElementById("end").value,
+              ];
+            },
+            didOpen: () => {
+              document.getElementById("start").removeAttribute("disabled");
+              document.getElementById("end").removeAttribute("disabled");
+            },
+          });
+          if (formValues) {
+            Swal.fire(JSON.stringify(formValues));
+          }
+        }
+
+        return {
+          toast: toast,
+          success: success,
+          error: error,
+          custom: custom,
+        };
+      }
+    </script>
+    <!-- custom javascript code -->
+
+    <!-- sweetalert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!-- sweetalert2 -->
+
+    <!-- scripts -->
   </body>
 </html>
