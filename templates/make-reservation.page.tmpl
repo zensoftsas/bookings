@@ -1,0 +1,72 @@
+{{template "base" .}}
+{{define "content"}}
+    <!-- container -->
+    <div class="container">
+      <div class="col">
+        <h1>Make Reservation</h1>
+        <h6> <b> Reservation Details</b></h6>
+
+        <form action="" method="post" class="need-validation" novalidate>
+          <div class="row">
+            <div>
+              <label for="first_name" class="form-label">First name:</label>
+              <input
+                type="text"
+                name="first_name"
+                id="first_name"
+                required
+                autocomplete="off"
+                class="form-control"
+              />
+            </div>
+
+            <div>
+              <label for="last_name" class="form-label">Last name:</label>
+              <input
+                type="text"
+                name="last_name"
+                id="last_name"
+                required
+                autocomplete="off"
+                class="form-control"
+              />
+            </div>
+
+            <div>
+              <label for="email" class="form-label">Email:</label>
+              <input
+                type="text"
+                name="email"
+                id="email"
+                required
+                autocomplete="off"
+                class="form-control"
+              />
+            </div>
+
+            <div>
+              <label for="phone" class="form-label">Phone:</label>
+              <input
+                type="tel"
+                name="phone"
+                id="phone"
+                required
+                autocomplete="off"
+                class="form-control"
+              />
+            </div>
+
+            <br /><br /><br /><br />
+            <div>
+              <input
+                type="submit"
+                value="Make Reservation"
+                class="btn btn-primary col-auto"
+              />
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+    <!-- container -->
+{{end}}
